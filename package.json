@@ -1,0 +1,42 @@
+{
+  "name": "napi",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Kris Liu <liuqi0611@126.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc -w",
+    "format": "prettier --write 'src/**/*.{ts,json,css}'"
+  },
+  "dependencies": {
+    "@types/node": "^10.12.12"
+  },
+  "devDependencies": {
+    "husky": "^1.2.0",
+    "lint-staged": "^8.1.0",
+    "prettier": "^1.15.3"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{ts}": [
+      "prettier --write",
+      "git add"
+    ],
+    "*.{json,grahql}": [
+      "prettier --write",
+      "git add"
+    ]
+  },
+  "prettier": {
+    "printWidth": 120,
+    "singleQuote": true,
+    "trailingComma": "es5",
+    "jsxBracketSameLine": true,
+    "semi": true
+  }
+}
