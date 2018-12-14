@@ -1,11 +1,12 @@
-import _ from 'lodash';
+import mapValues from 'lodash/mapValues';
+import _ from 'highland';
 import fs from 'fs';
 import path from 'path';
 import Benchmark from 'benchmark';
 import { decodeTxt } from './index';
 import AutoDetectDecoderStream from 'autodetect-decoder-stream';
 
-const pathList = _.mapValues(
+const pathList = mapValues(
   {
     utf8: 'utf8',
     gb2312: 'gb2312',
@@ -63,8 +64,27 @@ suite
       });
 
       stream.on('end', () => {
+        // console.log(txt.length);
         deferred.resolve();
       });
+    },
+  })
+  .add('decodeStreamviaHighland#redbig5', {
+    defer: true,
+    fn: function(deferred: any) {
+      const readable = fs.createReadStream(pathList.red_big5);
+
+      let txt = '';
+
+      _(readable)
+        .through(new AutoDetectDecoderStream())
+        .each(chunk => {
+          txt += chunk;
+        })
+        .done(() => {
+          // console.log(txt.length);
+          deferred.resolve();
+        });
     },
   })
   // add listeners

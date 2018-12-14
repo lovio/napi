@@ -44,6 +44,13 @@
   resolved "https://registry.yarnpkg.com/@types/benchmark/-/benchmark-1.0.31.tgz#2dd3514e93396f362ba5551a7c9ff0da405c1d38"
   integrity sha512-F6fVNOkGEkSdo/19yWYOwVKGvzbTeWkR/XQYBKtGBQ9oGRjBN9f/L4aJI4sDcVPJO58Y1CJZN8va9V2BhrZapA==
 
+"@types/highland@^2.12.1":
+  version "2.12.1"
+  resolved "https://registry.yarnpkg.com/@types/highland/-/highland-2.12.1.tgz#742a055bd8b4e14001ac712c9da39b294bb45083"
+  integrity sha512-PtZWJoS1OuOiZT4aST110Muf5FTKJw+mOKOammFIYt/jGXc/L/UsT6yB3uU9tYlU7MUnD7kHZR2P8GgBPMTZBQ==
+  dependencies:
+    "@types/node" "*"
+
 "@types/iconv-lite@^0.0.1":
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/@types/iconv-lite/-/iconv-lite-0.0.1.tgz#aa3b8bda2be512b1ae0a057b942e869c370a5569"
@@ -1530,6 +1537,11 @@ has@^1.0.1:
   integrity sha512-f2dvO0VU6Oej7RkWJGrehjbzMAjFp5/VKPp5tTpWIV4JHHZK1/BxbFRtf/siA2SWTe09caDmVtYYzWEIbBS4zw==
   dependencies:
     function-bind "^1.1.1"
+
+highland@^3.0.0-beta.7:
+  version "3.0.0-beta.7"
+  resolved "https://registry.yarnpkg.com/highland/-/highland-3.0.0-beta.7.tgz#c3bdf784e4175033ad4fcd86de4fb61854c27c26"
+  integrity sha512-94llvm7bmzqJLh1knCsO4TIzytU5wweQBxv9XcEs0s4idEXTG9vNMR1Dz0iROsLCjGKQMdhlnZI0bSL/MxGU0Q==
 
 home-or-tmp@^2.0.0:
   version "2.0.0"

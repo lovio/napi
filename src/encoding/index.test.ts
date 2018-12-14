@@ -1,11 +1,12 @@
-import _ from 'lodash';
+import _ from 'highland';
+import mapValues from 'lodash/mapValues';
 import fs from 'fs';
 import path from 'path';
 import { finished } from 'stream';
 import { decodeTxt, detectEncoding } from './index';
 import AutoDetectDecoderStream from 'autodetect-decoder-stream';
 
-const pathList = _.mapValues(
+const pathList = mapValues(
   {
     utf8: 'utf8',
     gb2312: 'gb2312',
@@ -42,22 +43,30 @@ describe('Encoding', () => {
   });
 
   test('decode stream', done => {
-    const gb2312 = decodeTxt(getFile(pathList.red_big5));
+    const gb2312 = decodeTxt(getFile(pathList.gb2312));
 
-    const readable = fs.createReadStream(pathList.red_big5);
+    const readable = fs.createReadStream(pathList.gb2312);
 
-    // @ts-ignore
-    const stream = readable.pipe(new AutoDetectDecoderStream());
     let txt = '';
+    // @ts-ignore
+    _(readable)
+      .map(x => {
+        console.log(x);
+        return x;
+      })
+      .through(new AutoDetectDecoderStream())
+      .each(chunk => {
+        txt += chunk;
+      })
+      .done(() => {
+        expect(txt).toEqual(gb2312);
+        done();
+      });
 
-    stream.on('data', (chunk: Buffer) => {
-      txt += chunk;
-    });
-
-    finished(stream, err => {
-      expect(err).toBeUndefined();
-      expect(txt).toEqual(gb2312);
-      done();
-    });
+    // onFinished(stream, err => {
+    //   expect(err).toBeUndefined();
+    //   expect(txt).toEqual(gb2312);
+    //   done();
+    // });
   });
 });

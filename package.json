@@ -17,6 +17,7 @@
     "@types/node": "^10.12.12",
     "autodetect-decoder-stream": "^1.0.1",
     "benchmark": "^2.1.4",
+    "highland": "^3.0.0-beta.7",
     "iconv-lite": "^0.4.24",
     "jschardet": "^1.6.0",
     "lodash": "^4.17.11"
