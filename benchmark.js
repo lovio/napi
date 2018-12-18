@@ -1,11 +1,12 @@
-import mapValues from 'lodash/mapValues';
-import _ from 'highland';
-import fs from 'fs';
-import path from 'path';
-import Benchmark from 'benchmark';
-import { decodeTxt } from './index';
-import AutoDetectDecoderStream from 'autodetect-decoder-stream';
-import { pathList, getFile } from '../utils';
+'use strict';
+
+const mapValues = require('lodash/mapValues');
+const fs = require('fs');
+const _ = require('highland');
+const Benchmark = require('benchmark');
+const { decodeTxt } = require('./build/encoding');
+const AutoDetectDecoderStream = require('autodetect-decoder-stream');
+const { pathList, getFile } = require('./build/utils');
 
 var suite = new Benchmark.Suite();
 
@@ -38,12 +39,12 @@ suite
   // })
   .add('decodeStream#redbig5', {
     defer: true,
-    fn: function(deferred: any) {
+    fn: function(deferred) {
       const readable = fs.createReadStream(pathList.red_big5);
 
       const stream = readable.pipe(new AutoDetectDecoderStream());
       let txt = '';
-      stream.on('data', (chunk: Buffer) => {
+      stream.on('data', chunk => {
         txt += chunk;
       });
 
@@ -55,7 +56,7 @@ suite
   })
   .add('decodeStreamviaHighland#redbig5', {
     defer: true,
-    fn: function(deferred: any) {
+    fn: function(deferred) {
       const readable = fs.createReadStream(pathList.red_big5);
 
       let txt = '';
@@ -72,7 +73,7 @@ suite
     },
   })
   // add listeners
-  .on('cycle', function(event: Benchmark.Event) {
+  .on('cycle', function(event) {
     console.log(String(event.target));
   })
   .on('complete', function() {

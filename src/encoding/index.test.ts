@@ -32,12 +32,12 @@ describe('Encoding', () => {
     let txt = '';
     // @ts-ignore
     _(readable)
-      .map(x => {
-        // console.log(x);
-        return x;
-      })
+      // .map(x => {
+      //   // console.log(x);
+      //   return x;
+      // })
       .through(new AutoDetectDecoderStream())
-      .each(chunk => {
+      .each((chunk: Buffer) => {
         txt += chunk;
       })
       .done(() => {
