@@ -1,27 +1,9 @@
 import _ from 'highland';
-import mapValues from 'lodash/mapValues';
 import fs from 'fs';
-import path from 'path';
 import { finished } from 'stream';
+import { pathList, getFile } from '../utils';
 import { decodeTxt, detectEncoding } from './index';
 import AutoDetectDecoderStream from 'autodetect-decoder-stream';
-
-const pathList = mapValues(
-  {
-    utf8: 'utf8',
-    gb2312: 'gb2312',
-    utf16be: 'utf16be',
-    utf16le: 'utf16le',
-    red_utf8: 'red_utf8',
-    red_big5: 'red_big5',
-    red_gbk: 'red_gbk',
-  },
-  file => path.join(__dirname, `./txt/${file}.txt`)
-);
-
-function getFile(path: string) {
-  return fs.readFileSync(path);
-}
 
 describe('Encoding', () => {
   test('detectEncoding', () => {
@@ -51,7 +33,7 @@ describe('Encoding', () => {
     // @ts-ignore
     _(readable)
       .map(x => {
-        console.log(x);
+        // console.log(x);
         return x;
       })
       .through(new AutoDetectDecoderStream())
