@@ -4,11 +4,14 @@ const mapValues = require('lodash/mapValues');
 const fs = require('fs');
 const _ = require('highland');
 const Benchmark = require('benchmark');
-const { decodeTxt } = require('./build/encoding');
+const { decodeTxt } = require('../build/encoding');
 const AutoDetectDecoderStream = require('autodetect-decoder-stream');
-const { pathList, getFile } = require('./build/utils');
+const { pathList, getFile } = require('../build/utils');
+const { streamOnData, streamOnDataForAwaitOf } = require('../build/benchHelper');
 
 var suite = new Benchmark.Suite();
+
+console.log('Benchmarks started');
 
 // add tests
 suite
@@ -29,10 +32,10 @@ suite
   //   const utf16le = getFile(pathList.utf16le);
   //   decodeTxt(utf16le);
   // })
-  .add('decoding#redbig5', function() {
-    const redbig5 = getFile(pathList.red_big5);
-    decodeTxt(redbig5);
-  })
+  // .add('decoding#redbig5', function() {
+  //   const redbig5 = getFile(pathList.red_big5);
+  //   decodeTxt(redbig5);
+  // })
   // .add('decoding#redgbk', function() {
   //   const redgbk = getFile(pathList.red_gbk);
   //   decodeTxt(redgbk);
@@ -40,38 +43,40 @@ suite
   .add('decodeStream#redbig5', {
     defer: true,
     fn: function(deferred) {
-      const readable = fs.createReadStream(pathList.red_big5);
-
-      const stream = readable.pipe(new AutoDetectDecoderStream());
-      let txt = '';
-      stream.on('data', chunk => {
-        txt += chunk;
-      });
-
-      stream.on('end', () => {
-        // console.log(txt.length);
-        deferred.resolve();
-      });
+      streamOnData(pathList.red_big5, deferred);
     },
   })
-  .add('decodeStreamviaHighland#redbig5', {
+  .add('decodeStreamForAwaitOf#redbig5', {
     defer: true,
     fn: function(deferred) {
-      const readable = fs.createReadStream(pathList.red_big5);
-
-      let txt = '';
-
-      _(readable)
-        .through(new AutoDetectDecoderStream())
-        .each(chunk => {
-          txt += chunk;
+      streamOnDataForAwaitOf(pathList.red_big5)
+        .then(result => {
+          deferred.resolve();
         })
-        .done(() => {
-          // console.log(txt.length);
+        .catch(err => {
+          console.log(err);
           deferred.resolve();
         });
     },
   })
+  // .add('decodeStreamviaHighland#redbig5', {
+  //   defer: true,
+  //   fn: function(deferred) {
+  //     const readable = fs.createReadStream(pathList.red_big5);
+
+  //     let txt = '';
+
+  //     _(readable)
+  //       .through(new AutoDetectDecoderStream())
+  //       .each(chunk => {
+  //         txt += chunk;
+  //       })
+  //       .done(() => {
+  //         // console.log(txt.length);
+  //         deferred.resolve();
+  //       });
+  //   },
+  // })
   // add listeners
   .on('cycle', function(event) {
     console.log(String(event.target));

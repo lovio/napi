@@ -9,7 +9,7 @@
     "build:native": "neon build --release",
     "build": "tsc",
     "build:watch": "tsc -w",
-    "benchmark": "yarn run build && node benchmark.js",
+    "bench": "yarn run build && node benchmarks/decoding.js",
     "format": "prettier --write 'src/**/*.{ts,json,css}'"
   },
   "dependencies": {
